@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Admission Q&A Bot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('static/kings-college-cambridge-uk-university.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .container h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .message-box {
+            width: 80%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            flex: 1;
+            margin-right: 10px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .chat-box {
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .chat-box div {
+            margin-bottom: 10px;
+        }
+        .chat-box .user {
+            text-align: right;
+            color: #121314;
+        }
+        .chat-box .bot {
+            text-align: left;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>College Admission Q&A Bot</h1>
+        <div class="chat-box" id="chat_box"></div>
+        <div class="input-group">
+            <input type="text" id="user_input" class="message-box" placeholder="Ask a question">
+            <button class="btn" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script>
+        function sendMessage() {
+            const user_input = document.getElementById('user_input').value;
+            fetch('/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ question: user_input })
+            }).then(response => response.json()).then(data => {
+                document.getElementById('chat_box').innerHTML += `<div class="user">${user_input}</div>`;
+                document.getElementById('chat_box').innerHTML += `<div class="bot">${data.response}</div>`;
+                document.getElementById('user_input').value = '';
+                document.getElementById('chat_box').scrollTop = document.getElementById('chat_box').scrollHeight;
+            });
+        }
+    </script>
+</body>
+</html>
